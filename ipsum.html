@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secret Language App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            background-color: #f4f4f4;
+        }
+        textarea {
+            width: 80%;
+            height: 150px;
+            font-size: 18px;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .button {
+            font-size: 18px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            font-size: 20px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .radio-buttons {
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🔐 Secret Language App</h1>
+    <p>Enter a message below and choose whether to encode or decode it!</p>
+    
+    <textarea id="inputText" placeholder="Enter your message here..."></textarea><br>
+    
+    <div class="radio-buttons">
+        <input type="radio" id="encode" name="mode" value="encode" checked> Encode
+        <input type="radio" id="decode" name="mode" value="decode"> Decode
+    </div>
+    
+    <button class="button" onclick="processText()">Convert</button>
+    
+    <div class="result" id="outputText"></div>
+
+    <script>
+        function toSecretLanguage(text) {
+            const vowels = 'aeiouAEIOU';
+            let secret = '';
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                if (/[a-zA-Z]/.test(char) && !vowels.includes(char)) {
+                    secret += char + 'ip';
+                } else {
+                    secret += char;
+                }
+            }
+            return secret;
+        }
+
+        function fromSecretLanguage(secret) {
+            const vowels = 'aeiouAEIOU';
+            let decoded = '';
+            let i = 0;
+            while (i < secret.length) {
+                const char = secret[i];
+                if (/[a-zA-Z]/.test(char) && !vowels.includes(char)) {
+                    decoded += char;
+                    i += 3; // Skip the 'ip' part
+                } else {
+                    decoded += char;
+                    i++;
+                }
+            }
+            return decoded;
+        }
+
+        function processText() {
+            const inputText = document.getElementById("inputText").value;
+            const outputText = document.getElementById("outputText");
+            const mode = document.querySelector('input[name="mode"]:checked').value;
+
+            if (!inputText.trim()) {
+                alert("Please enter some text.");
+                return;
+            }
+
+            let result;
+            if (mode === "encode") {
+                result = toSecretLanguage(inputText);
+            } else {
+                result = fromSecretLanguage(inputText);
+            }
+
+            outputText.textContent = result;
+        }
+    </script>
+
+</body>
+</html>
